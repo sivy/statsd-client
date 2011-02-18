@@ -3,7 +3,7 @@ package Net::StatsD::Client;
 use strict;
 use warnings;
 
-$VERSION = '0.2';
+our $VERSION = '0.2';
 
 =head1 NAME
 
@@ -17,7 +17,7 @@ Statsd sits in front of the Graphite metrics server, providing a simple API for 
 
 =cut
 
-use IO:Socket::INET;
+use IO::Socket::INET;
 
 sub new {
     my $class = shift;
@@ -27,6 +27,28 @@ sub new {
     my $self = bless \%options, $class;
     
     $self;
+}
+
+sub timing {
+    my $self = shift;
+    my ($stat, $time, $sample_rate) = @_;
+    
+    my $stats = { "$stat" => "$time|ms" };
+    $self->send($stats, $sample_rate);
+}
+
+sub increment {
+    my $self = shift;
+    my ($stats, $sample_rate) = @_;
+    
+    $self->update_stats($stats, 1, $sample_rate);
+}
+
+sub decrement {
+    my $self = shift;
+    my ($stats, $sample_rate) = @_;
+    
+    $self->update_stats($stats, -1, $sample_rate);
 }
 
 sub update_stats {
@@ -64,15 +86,15 @@ sub send {
     }
     
     my $addr = sprintf("%s:%d", $self->{host}, $self->{port});
-    $socket = new IO::Socket::INET (
+    my $socket = new IO::Socket::INET (
         PeerAddr   => $addr,
         Proto        => 'udp'
     ) or die "ERROR in Socket Creation : $!\n";
     
     eval {
-        for my $stat (keys %{$sample_data}) {
-            $value = $sample_data->{$stat};
-            $send_data = "$stat:$value";
+        for my $stat (keys %{$sampled_data}) {
+            my $value = $sampled_data->{$stat};
+            my $send_data = "$stat:$value";
             $socket->send($send_data);
         }
     };
