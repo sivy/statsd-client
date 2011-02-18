@@ -56,11 +56,11 @@ DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
 NAME = Net::StatsD::Client
 NAME_SYM = Net_StatsD_Client
-VERSION = 0.3
+VERSION = 0.4
 VERSION_MACRO = VERSION
-VERSION_SYM = 0_3
+VERSION_SYM = 0_4
 DEFINE_VERSION = -D$(VERSION_MACRO)=\"$(VERSION)\"
-XS_VERSION = 0.3
+XS_VERSION = 0.4
 XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 INST_ARCHLIB = blib/arch
@@ -257,7 +257,7 @@ RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
 DISTNAME = Net-StatsD-Client
-DISTVNAME = Net-StatsD-Client-0.3
+DISTVNAME = Net-StatsD-Client-0.4
 
 
 # --- MakeMaker macro section:
@@ -497,7 +497,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) Generating META.yml
 	$(NOECHO) $(ECHO) '--- #YAML:1.0' > META_new.yml
 	$(NOECHO) $(ECHO) 'name:               Net-StatsD-Client' >> META_new.yml
-	$(NOECHO) $(ECHO) 'version:            0.3' >> META_new.yml
+	$(NOECHO) $(ECHO) 'version:            0.4' >> META_new.yml
 	$(NOECHO) $(ECHO) 'abstract:           client library for sending stats to Etsy'\''d StatsD server' >> META_new.yml
 	$(NOECHO) $(ECHO) 'author:' >> META_new.yml
 	$(NOECHO) $(ECHO) '    - Steve Ivy <steveivy@gmail.com>' >> META_new.yml
@@ -806,7 +806,7 @@ testdb_static :: testdb_dynamic
 # --- MakeMaker ppd section:
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd :
-	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="0.3">' > $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="0.4">' > $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <ABSTRACT>client library for sending stats to Etsy'\''d StatsD server</ABSTRACT>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Steve Ivy &lt;steveivy@gmail.com&gt;</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
