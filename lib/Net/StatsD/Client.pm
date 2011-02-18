@@ -3,7 +3,7 @@ package Net::StatsD::Client;
 use strict;
 use warnings;
 
-our $VERSION = '0.2';
+our $VERSION = '0.3';
 
 =head1 NAME
 
@@ -54,6 +54,11 @@ sub decrement {
 sub update_stats {
     my $self = shift;
     my ($stats, $delta, $sample_rate) = @_;
+    
+    unless (ref($stats) eq 'ARRAY_REF') {
+        $stats = [$stats];
+    }
+    
     $delta ||= 1;
     $sample_rate ||= 1;
 
