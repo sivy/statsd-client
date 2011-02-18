@@ -17,3 +17,7 @@ Statsd sits in front of the Graphite metrics server, providing a simple API for 
     $client->timing('perl_test.timing',500);
     $client->increment('perl_test.inc_int');
     $client->decrement('perl_test.inc_int');
+
+# License
+
+This code is released under the same license as Perl itself.
