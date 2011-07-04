@@ -68,7 +68,7 @@ sub timing {
     my ( $stat, $time, $sample_rate ) = @_;
 
     my $stats = { "$stat" => "$time|ms" };
-    $self->send( $stats, $sample_rate );
+    $self->_send( $stats, $sample_rate );
 }
 
 =head2 increment
@@ -84,7 +84,7 @@ sub increment {
     my $self = shift;
     my ( $stats, $sample_rate ) = @_;
 
-    $self->update_stats( $stats, 1, $sample_rate );
+    $self->_update_stats( $stats, 1, $sample_rate );
 }
 
 =head2 decrement
@@ -101,11 +101,11 @@ sub decrement {
     my $self = shift;
     my ( $stats, $sample_rate ) = @_;
 
-    $self->update_stats( $stats, -1, $sample_rate );
+    $self->_update_stats( $stats, -1, $sample_rate );
 }
 
 # Any required stats munging
-sub update_stats {
+sub _update_stats {
     my $self = shift;
     my ( $stats, $delta, $sample_rate ) = @_;
 
@@ -120,11 +120,11 @@ sub update_stats {
     for my $stat (@{$stats}) {
         $data->{$stat} = "$delta|c";
     }
-    $self->send( $data, $sample_rate );
+    $self->_send( $data, $sample_rate );
 }
 
 # Send the packet
-sub send {
+sub _send {
     my $self = shift;
     my ( $data, $sample_rate ) = @_;
     $sample_rate ||= 1;
