@@ -73,10 +73,14 @@ sub timing {
 
 =head2 increment
 
-    $client->increment( $stat, $sameple_rate );
+    $client->increment( $stats, $sameple_rate );
 
-Send an increment packet to a counter in the StatsD server. Sameple rate should be
-between 0 and 1 and will default to 1, if not provided.
+Send an increment packet to a counter in the StatsD server.
+
+Stats should be either a scalar statistics name or an array ref of statistics to
+increment.
+
+Sameple rate should be between 0 and 1 and will default to 1, if not provided.
 
 =cut
 
@@ -89,11 +93,14 @@ sub increment {
 
 =head2 decrement
 
-    $client->decrement( $stat, $sample_rate );
+    $client->decrement( $stats, $sample_rate );
 
-Send an decrement packet to a counter in the StatsD server. Sameple rate should be
-between 0 and 1 and will default to 1, if not provided.
+Send a decrement packet to a counter in the StatsD server.
 
+Stats should be either a scalar statistics name or an array ref of statistics to
+decrement.
+
+Sameple rate should be between 0 and 1 and will default to 1, if not provided.
 
 =cut
 
