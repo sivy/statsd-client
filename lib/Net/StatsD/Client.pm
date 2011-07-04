@@ -1,21 +1,6 @@
-package Net::StatsD::Client;
-
-use strict;
-use warnings;
-
-our $VERSION = '0.5';
-
-=head1 NAME
-
-Net::StatsD::Client - client library for sending stats to Etsy'd StatsD server
+# ABSTRACT: Client library for sending stats to a StatsD server
 
 =head1 SYNOPSIS
-
-The brilliant devops folks at Etsy released (and posted about) an awesome little node.js-based stats server called statsd.
-
-Statsd sits in front of the Graphite metrics server, providing a simple API for applications to send stats over UDP. UDP is "old tech" but is fire-and-forget -- clients don't have to wait for a response to keep processing.
-
-=head1 USAGE
 
     use Net::StatsD::Client;
 
@@ -25,13 +10,37 @@ Statsd sits in front of the Graphite metrics server, providing a simple API for 
     $client->increment('perl_test.inc_int');
     $client->decrement('perl_test.inc_int');
 
-=head1 License
 
-This code is released under the same license as Perl itself.
+=head1 DESCRIPTION
+
+The brilliant devops folks at Etsy released (and posted about) an awesome little
+node.js-based stats server called statsd.
+
+Statsd sits in front of the Graphite metrics server, providing a simple API for
+applications to send stats over UDP. UDP is "old tech" but is fire-and-forget
+-- clients don't have to wait for a response to keep processing.
+
+=head1 METHODS
 
 =cut
 
-use IO::Socket::INET;
+package Net::StatsD::Client;
+
+use strict;
+use warnings;
+
+our $VERSION = '0.5';
+
+=head2 new
+
+    my $client = Net::StatsD::Client->new( host => ?, port => ? );
+
+Instantiates a new L<Net::StatsD::Client> object.
+
+The paramaters are optional, host defaults to 'localhost' and port defaults to
+'8125', if not provided.
+
+=cut
 
 sub new {
     my $class = shift;
@@ -43,6 +52,15 @@ sub new {
     $self;
 }
 
+=head2 timiing
+
+    $client->timing( $stat, $time, $sample_rate );
+
+Sends a timing packet to the StatsD server. Sample rate should be a between 0
+and 1 and will default to 1, if not provided.
+
+=cut
+
 sub timing {
     my $self = shift;
     my ($stat, $time, $sample_rate) = @_;
@@ -51,12 +69,31 @@ sub timing {
     $self->send($stats, $sample_rate);
 }
 
+=head2 increment
+
+    $client->increment( $stat, $sameple_rate );
+
+Send an increment packet to a counter in the StatsD server. Sameple rate should be
+between 0 and 1 and will default to 1, if not provided.
+
+=cut
+
 sub increment {
     my $self = shift;
     my ($stats, $sample_rate) = @_;
     
     $self->update_stats($stats, 1, $sample_rate);
 }
+
+=head2 decrement
+
+    $client->decrement( $stat, $sample_rate );
+
+Send an decrement packet to a counter in the StatsD server. Sameple rate should be
+between 0 and 1 and will default to 1, if not provided.
+
+
+=cut
 
 sub decrement {
     my $self = shift;
@@ -65,6 +102,7 @@ sub decrement {
     $self->update_stats($stats, -1, $sample_rate);
 }
 
+# Any required stats munging
 sub update_stats {
     my $self = shift;
     my ($stats, $delta, $sample_rate) = @_;
@@ -83,7 +121,7 @@ sub update_stats {
     $self->send($data, $sample_rate);
 }
 
-# send the data
+# Send the packet
 sub send {
     my $self = shift;
     
