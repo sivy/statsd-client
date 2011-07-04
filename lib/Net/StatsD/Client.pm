@@ -48,7 +48,7 @@ sub new {
     $options{host} ||= 'localhost';
     $options{port} ||= 8125;
     my $self = bless \%options, $class;
-    
+
     $self;
 }
 
@@ -64,7 +64,7 @@ and 1 and will default to 1, if not provided.
 sub timing {
     my $self = shift;
     my ($stat, $time, $sample_rate) = @_;
-    
+
     my $stats = { "$stat" => "$time|ms" };
     $self->send($stats, $sample_rate);
 }
@@ -81,7 +81,7 @@ between 0 and 1 and will default to 1, if not provided.
 sub increment {
     my $self = shift;
     my ($stats, $sample_rate) = @_;
-    
+
     $self->update_stats($stats, 1, $sample_rate);
 }
 
@@ -98,7 +98,7 @@ between 0 and 1 and will default to 1, if not provided.
 sub decrement {
     my $self = shift;
     my ($stats, $sample_rate) = @_;
-    
+
     $self->update_stats($stats, -1, $sample_rate);
 }
 
@@ -106,11 +106,11 @@ sub decrement {
 sub update_stats {
     my $self = shift;
     my ($stats, $delta, $sample_rate) = @_;
-    
+
     unless (ref($stats) eq 'ARRAY_REF') {
         $stats = [$stats];
     }
-    
+
     $delta ||= 1;
     $sample_rate ||= 1;
 
@@ -124,12 +124,12 @@ sub update_stats {
 # Send the packet
 sub send {
     my $self = shift;
-    
+
     my ($data, $sample_rate) = @_;
     $sample_rate ||= 1;
-    
+
     my $sampled_data = {};
-    
+
     if ($sample_rate < 1) {
         if (rand() <= $sample_rate) {
             for my $stat (keys %{$data}) {
@@ -141,13 +141,13 @@ sub send {
     else {
         $sampled_data = $data;
     }
-    
+
     my $addr = sprintf("%s:%d", $self->{host}, $self->{port});
     my $socket = new IO::Socket::INET (
         PeerAddr   => $addr,
         Proto        => 'udp'
     ) or die "ERROR in Socket Creation : $!\n";
-    
+
     eval {
         for my $stat (keys %{$sampled_data}) {
             my $value = $sampled_data->{$stat};
@@ -155,6 +155,6 @@ sub send {
             $socket->send($send_data);
         }
     };
-        
+
 }
 1;
