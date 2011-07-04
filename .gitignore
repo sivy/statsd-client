@@ -1,1 +1,5 @@
 .shipit
+*.swp
+/{{$dist->name}}*
+.build
+Net-StatsD-Client*
