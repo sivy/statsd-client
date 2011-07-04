@@ -158,4 +158,18 @@ sub _send {
     };
 
 }
+
+=head1 CONTRIBUTORS
+
+Adam Taylor <ajct@cpan.org> - additional documentation.
+
+=head1 SEE ALSO
+
+L<http://codeascraft.etsy.com/2011/02/15/measure-anything-measure-everything/>
+Etsy blog post introducting StatsD.
+
+L<https://github.com/etsy/statsd> - StatsD github repository.
+
+=cut
+
 1;
