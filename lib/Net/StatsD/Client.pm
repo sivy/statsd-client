@@ -54,7 +54,7 @@ sub new {
     return $self;
 }
 
-=head2 timiing
+=head2 timing
 
     $client->timing( $stat, $time, $sample_rate );
 
